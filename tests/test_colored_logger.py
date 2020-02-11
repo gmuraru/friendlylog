@@ -13,6 +13,8 @@ from threading import Thread
 class TestColoredLogger(unittest.TestCase):
 
     def setUp(self):
+        self.saved_inner_formatter = logger.inner_formatter
+
         # Remove handler that outputs to STDERR.
         logger.inner_logger.removeHandler(logger.inner_stream_handler)
 
@@ -23,11 +25,12 @@ class TestColoredLogger(unittest.TestCase):
             self.log_capture = io.StringIO()
         handler = logging.StreamHandler(self.log_capture)
         handler.setFormatter(logger.inner_formatter)
+        logger.inner_stream_handler = handler
         logger.inner_logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
 
     def tearDown(self):
-        pass
+        logger.inner_formatter = self.saved_inner_formatter
 
     def last_line(self):
         log = self.log_capture.getvalue().splitlines()
@@ -209,6 +212,20 @@ class TestColoredLogger(unittest.TestCase):
         logger.debug([10, 20, 30])
         logger.critical({})
         logger.warning(set([-1, 4]))
+
+    def test_set_custom_fmt(self):
+        dbg_lvls = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        fmt_string = "[%(funcName)s] %(message)s"
+        logger.set_fmt(fmt_string)
+
+        for level in dbg_lvls:
+            getattr(logger, level.lower())("Hello")
+
+        last_n = self.last_n_lines(len(dbg_lvls))
+        for level, log in zip(dbg_lvls, last_n):
+            self.assertRegex(
+                log,
+                r"\[test_set_custom_fmt\] .*{0}: Hello.*".format(level))
 
 
 if __name__ == '__main__':

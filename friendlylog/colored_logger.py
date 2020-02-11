@@ -50,6 +50,18 @@ class _ColoredFormatter(logging.Formatter):
         return super(_ColoredFormatter, self).format(record)
 
 
+def set_fmt(fmt_string):
+    assert isinstance(fmt_string, str), "fmt_string must be string"
+
+    global inner_formatter
+
+    formatter = _ColoredFormatter(
+        fmt=fmt_string
+    )
+    inner_stream_handler.setFormatter(formatter)
+    inner_formatter = formatter
+
+
 _logger = logging.getLogger("friendlylog.ColoredLogger" + "-" + __name__)
 do_not_propagate(_logger)
 

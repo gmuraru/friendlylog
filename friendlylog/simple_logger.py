@@ -32,6 +32,18 @@ class _SimpleFormatter(logging.Formatter):
         return super(_SimpleFormatter, self).format(record)
 
 
+def set_fmt(fmt_string):
+    assert isinstance(fmt_string, str), "fmt_string must be string"
+
+    global inner_formatter
+
+    formatter = _SimpleFormatter(
+        fmt=fmt_string
+    )
+    inner_stream_handler.setFormatter(formatter)
+    inner_formatter = formatter
+
+
 _logger = logging.getLogger("friendlyLog.SimpleLogger" + "-" + __name__)
 do_not_propagate(_logger)
 
@@ -43,6 +55,7 @@ _formatter = _SimpleFormatter(
 _stream_handler.setFormatter(_formatter)
 _logger.addHandler(_stream_handler)
 _logger.setLevel(logging.DEBUG)
+
 
 
 # Export functions and objects.
