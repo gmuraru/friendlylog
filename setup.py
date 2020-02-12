@@ -24,6 +24,11 @@ setup(
         'colored>=1.4.0',
         'six>=1.12.0',
     ],
+    extras_require={
+        ':python_version == "2.7"': [
+            'unittest2',
+        ],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 2",

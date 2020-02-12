@@ -4,3 +4,4 @@ codecov
 coverage
 pytest
 pytest-cov
+unittest2; python_version <= "2.7"
