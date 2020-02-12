@@ -57,7 +57,6 @@ _logger.addHandler(_stream_handler)
 _logger.setLevel(logging.DEBUG)
 
 
-
 # Export functions and objects.
 inner_logger = _logger  # Don't use this except if you know what you are doing.
 inner_stream_handler = _stream_handler  # Same thing for this object.

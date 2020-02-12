@@ -8,6 +8,11 @@ import unittest
 from friendlylog import colored_logger as logger
 from threading import Thread
 
+if six.PY2:
+    import unittest2 as unittest
+else:
+    import unittest
+
 
 # Tests cannot be executed in parallel due to the hack in the setUp method.
 class TestColoredLogger(unittest.TestCase):
